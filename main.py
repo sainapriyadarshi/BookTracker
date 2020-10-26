@@ -1,0 +1,61 @@
+import json
+import time
+
+def add_book():
+    #start command loop
+    print ("Enter book information")
+    name = input ("Name:")
+    author =  input ("Author:")
+    genre =  input ("Genre:") 
+
+    new_dict = {
+        "name" : name,
+        "author" : author,
+        "genre" : genre,
+        "date started" : time.time(),
+        "date finished" : 0
+    }
+    book_data[name] = new_dict;
+
+def print_booklist():
+    #go through each thing in dictionary
+    #print out name
+
+    for key in book_data:
+        print (key)
+
+def finish_a_book():
+  book = input ("What book did you finish? ")
+  book_data[book]["date finished"] = time.time()
+
+def book_details(book_name):
+  print(book_data[book_name]["name"])
+  print(book_data[book_name]["author"])
+  print(book_data[book_name]["genre"])
+
+  print(time.asctime(time.localtime(book_data[book_name]["date started"])))
+  print(time.asctime(time.localtime(book_data[book_name]["date finished"])))
+  
+if __name__== "__main__":
+  #loads in existing books
+  with open("books.json") as f:
+    book_data = json.load(f)
+ 
+  book_details("Harry Potter and the Philosopher's Stone") 
+ 
+  answer="0"
+  while answer != "exit" :
+    #print available commands
+    print("1. Add Book to List")
+    print("2. Show Booklist")
+    print("3. Finished a book")
+    #ask the user what they want to do
+    answer = input("Enter Command (#):")
+    if answer == "1":
+      add_book()
+    if answer == "2":
+        print_booklist()
+    if answer == "3":
+        finish_a_book()
+  with open('books.json', 'w') as outfile:
+    json.dump(book_data,outfile)
